@@ -1,0 +1,674 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>2035年アパレル産業：カーボンニュートラルと知識駆動型変革</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- Visualization & Content Choices:
+        - Report Info: 炭素排出量（産業全体の10％）、繊維廃棄物（EUで年間1260万トン、リサイクル率1％未満）。 Goal: Inform on scale of problem. Viz/Method: Pie chart (emissions), Bar chart (waste). Interaction: Static display with tooltips. Justification: Quick visual impact. Library: Chart.js.
+        - Report Info: 表1（環境および経営上の課題）。 Goal: Compare challenges. Viz/Method: Interactive cards for each challenge category. Interaction: Click to expand. Justification: Detailed comparison. Library: HTML/JS.
+        - Report Info: 表2（持続可能な素材）。 Goal: Explore material options. Viz/Method: Filterable card layout. Interaction: Filter by type, click card for modal with details. Justification: Easy browsing and deep-dive. Library: HTML/JS.
+        - Report Info: 表3（AI応用事例）。 Goal: Understand AI's role across value chain. Viz/Method: Interactive diagram of value chain; clicking a stage reveals AI uses (cards/modal). Interaction: Click to explore. Justification: Visualizes AI integration. Library: HTML/JS.
+        - Report Info: 表5（知識戦略フレームワーク）。 Goal: Detail strategic pillars. Viz/Method: Tabbed sections. Interaction: Click tabs. Justification: Organized presentation. Library: HTML/JS.
+        - Report Info: 消費者教育/価格感応性に対するAI活用。 Goal: Showcase solution. Viz/Method: Detailed text section with conceptual examples. Interaction: Static. Justification: Explains key concept. Library: HTML/JS.
+        - CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. Charts via Chart.js (Canvas). Diagrams via HTML/CSS/Tailwind.
+    -->
+    <style>
+        body { font-family: 'Inter', sans-serif; background-color: #FAF3E0; color: #3E2723; }
+        .nav-link { transition: all 0.3s ease; }
+        .nav-link:hover, .nav-link.active { color: #FFAB40; border-bottom-color: #FFAB40; }
+        .section-title { color: #5D4037; }
+        .card { background-color: #FFF8E7; border: 1px solid #E0E0E0; border-radius: 0.5rem; box-shadow: 0 2px 4px rgba(0,0,0,0.05); }
+        .card-title { color: #5D4037; }
+        .btn-accent { background-color: #FFAB40; color: #3E2723; transition: background-color 0.3s ease; }
+        .btn-accent:hover { background-color: #FF8F00; }
+        .tab-button { transition: all 0.3s ease; }
+        .tab-button.active { border-color: #FFAB40; color: #FFAB40; background-color: #FFF8E7; }
+        .modal { display: none; position: fixed; z-index: 100; left: 0; top: 0; width: 100%; height: 100%; overflow: auto; background-color: rgba(0,0,0,0.5); }
+        .modal-content { background-color: #FAF3E0; margin: 10% auto; padding: 20px; border-radius: 8px; width: 80%; max-width: 700px; position: relative; }
+        .close-button { position: absolute; top: 10px; right: 20px; font-size: 24px; font-weight: bold; cursor: pointer; }
+        .chart-container { position: relative; width: 100%; max-width: 600px; margin-left: auto; margin-right: auto; height: 300px; max-height: 400px; padding: 1rem; background-color: #FFF8E7; border-radius: 0.5rem; box-shadow: 0 2px 4px rgba(0,0,0,0.05); margin-bottom: 1rem;}
+        @media (min-width: 768px) { .chart-container { height: 350px; } }
+        .scroll-margin-top { scroll-margin-top: 80px; /* Adjust based on your fixed header height */ }
+        h1, h2, h3 { font-weight: 600; }
+    </style>
+</head>
+<body class="antialiased">
+
+    <header class="bg-[#FAF3E0] shadow-md fixed top-0 left-0 right-0 z-50">
+        <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-20">
+                <div class="flex-shrink-0">
+                    <h1 class="text-2xl font-bold text-[#5D4037]">2035年アパレル産業の未来</h1>
+                </div>
+                <nav class="hidden md:block">
+                    <div class="ml-10 flex items-baseline space-x-4">
+                        <a href="#overview" class="nav-link px-3 py-2 rounded-md text-sm font-medium text-[#3E2723] border-b-2 border-transparent">概要</a>
+                        <a href="#challenges" class="nav-link px-3 py-2 rounded-md text-sm font-medium text-[#3E2723] border-b-2 border-transparent">課題と機会</a>
+                        <a href="#knowledge-vision" class="nav-link px-3 py-2 rounded-md text-sm font-medium text-[#3E2723] border-b-2 border-transparent">知的ビジョン</a>
+                        <a href="#knowledge-strategy" class="nav-link px-3 py-2 rounded-md text-sm font-medium text-[#3E2723] border-b-2 border-transparent">知的戦略</a>
+                        <a href="#outlook" class="nav-link px-3 py-2 rounded-md text-sm font-medium text-[#3E2723] border-b-2 border-transparent">将来展望</a>
+                    </div>
+                </nav>
+                <div class="md:hidden">
+                    <button id="mobile-menu-button" class="text-[#5D4037] hover:text-[#FFAB40] focus:outline-none">
+                        <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7" />
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+        <div class="md:hidden hidden" id="mobile-menu">
+            <div class="px-2 pt-2 pb-3 space-y-1 sm:px-3">
+                <a href="#overview" class="nav-link block px-3 py-2 rounded-md text-base font-medium text-[#3E2723]">概要</a>
+                <a href="#challenges" class="nav-link block px-3 py-2 rounded-md text-base font-medium text-[#3E2723]">課題と機会</a>
+                <a href="#knowledge-vision" class="nav-link block px-3 py-2 rounded-md text-base font-medium text-[#3E2723]">知的ビジョン</a>
+                <a href="#knowledge-strategy" class="nav-link block px-3 py-2 rounded-md text-base font-medium text-[#3E2723]">知的戦略</a>
+                <a href="#outlook" class="nav-link block px-3 py-2 rounded-md text-base font-medium text-[#3E2723]">将来展望</a>
+            </div>
+        </div>
+    </header>
+
+    <main class="pt-20">
+        <section id="overview" class="py-12 md:py-16 bg-[#FFF8E7] scroll-margin-top">
+            <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+                <h2 class="text-3xl md:text-4xl font-semibold section-title mb-8 text-center">概要：2035年アパレル産業のカーボンニュートラル使命と知識駆動型変革</h2>
+                <p class="text-lg text-[#3E2723] mb-6 leading-relaxed">
+                    2035年、地球規模の気候変動と環境問題は各産業に深刻な課題をもたらし、高炭素排出かつ資源集約型であるアパレル産業にとって、カーボンニュートラルへの転換は喫緊の課題です。このインタラクティブレポートは、2035年のアパレル企業が極度の環境圧力下でどのような未来像を描くのかを探求し、カーボンニュートラル目標の達成方法に焦点を当て、特に人工知能（AI）技術をはじめとする知識経営がこの変革プロセスで果たす中核的役割を分析します。当時アパレル産業が直面する環境・経営課題、企業が担うべき社会的価値と対応能力、知識創造へのビジョン、そして価値を創造・保護・伝達するための知識戦略の設計について深く掘り下げます。
+                </p>
+                <p class="text-lg text-[#3E2723] leading-relaxed">
+                    AI技術は、持続可能な素材革新、クリーンな生産プロセスの最適化、循環型経済モデルの構築を推進する重要なツールであるだけでなく、消費者の環境意識向上や環境配慮型製品の価格感応性問題の解決においても重要な役割を果たします。本レポートの中核的発見は、アパレル企業が将来の知的ビジョン策定、知的資産の創造・保護・価値伝達などにおいて戦略的な参考情報を提供します。
+                </p>
+            </div>
+        </section>
+
+        <section id="challenges" class="py-12 md:py-16 scroll-margin-top">
+            <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+                <h2 class="text-3xl md:text-4xl font-semibold section-title mb-8 text-center">課題と機会</h2>
+                <p class="text-lg text-center text-[#3E2723] mb-10 max-w-3xl mx-auto leading-relaxed">
+                    2035年に入り、アパレル産業は未曾有の環境高圧下で事業を展開し、同時にカーボンニュートラル目標がもたらす複雑な経営課題に直面します。これらの課題は外部環境の悪化だけでなく、業界内部の変革の困難さにも起因します。しかし、課題の中にはイノベーションと社会的責任を通じて産業を再構築する機会も秘められています。
+                </p>
+
+                <div class="grid md:grid-cols-2 gap-8 mb-12">
+                    <div class="card p-6">
+                        <h3 class="text-2xl card-title mb-4">主な環境圧力</h3>
+                         <div class="chart-container">
+                            <canvas id="emissionsChart"></canvas>
+                        </div>
+                        <p class="text-sm text-gray-600 mb-2 text-center">図1：アパレル産業の炭素排出割合</p>
+                        <div class="chart-container mt-6">
+                            <canvas id="wasteChart"></canvas>
+                        </div>
+                        <p class="text-sm text-gray-600 mb-2 text-center">図2：繊維廃棄物のリサイクル状況</p>
+                        <ul class="list-disc list-inside space-y-2 text-[#3E2723] mt-4">
+                            <li><strong>炭素排出の脅威：</strong>世界の産業炭素排出量の10％を占め、染色・仕上げなどの高エネルギー消費工程が主な排出源。</li>
+                            <li><strong>繊維廃棄物：</strong>EUでは年間1260万トン発生、世界のリサイクル率は1％未満。</li>
+                            <li><strong>水資源消費：</strong>年間930億立方メートルの水を消費。</li>
+                            <li><strong>土地資源の占有：</strong>アパレル産業は土地の主要な利用の一つ。</li>
+                        </ul>
+                    </div>
+                    <div class="card p-6">
+                        <h3 class="text-2xl card-title mb-4">カーボンニュートラル目標下での経営課題</h3>
+                        <div id="managementChallengesContainer" class="space-y-3">
+                            </div>
+                    </div>
+                </div>
+
+                <div class="card p-6">
+                    <h3 class="text-2xl card-title mb-4 text-center">社会的価値と対応能力</h3>
+                    <p class="text-[#3E2723] mb-6 leading-relaxed">2035年の厳しい環境背景のもと、アパレル企業は自社の生存と発展の課題に対応するだけでなく、社会各界の期待に積極的に応え、より広範な社会的価値を創造する必要があります。これは企業がカーボンニュートラルを追求する過程で、消費者、従業員、コミュニティ、さらには地球全体を含む多岐にわたるステークホルダーのニーズと関心を巧みにバランスさせることを要求します。</p>
+                    <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-6 text-center">
+                        <div>
+                            <div class="p-4 bg-[#AED581] rounded-full inline-block mb-2 text-white text-2xl">🌍</div>
+                            <h4 class="font-semibold text-lg text-[#5D4037]">地球</h4>
+                            <p class="text-sm text-[#3E2723]">カーボンニュートラル履行、循環型経済の発展、生態環境保護の責任。</p>
+                        </div>
+                        <div>
+                            <div class="p-4 bg-[#90CAF9] rounded-full inline-block mb-2 text-white text-2xl">👥</div>
+                            <h4 class="font-semibold text-lg text-[#5D4037]">消費者</h4>
+                            <p class="text-sm text-[#3E2723]">製品の環境影響、倫理的な調達源、透明性に関心を持ち、持続可能性と価格のバランスを取る。</p>
+                        </div>
+                         <div>
+                            <div class="p-4 bg-[#FFAB40] rounded-full inline-block mb-2 text-white text-2xl">🤝</div>
+                            <h4 class="font-semibold text-lg text-[#5D4037]">従業員と労働者</h4>
+                            <p class="text-sm text-[#3E2723]">公正な労働、安全で健康的な労働環境、合理的な報酬と技能再訓練の保障。</p>
+                        </div>
+                        <div>
+                            <div class="p-4 bg-[#BCAAA4] rounded-full inline-block mb-2 text-white text-2xl">🏘️</div>
+                            <h4 class="font-semibold text-lg text-[#5D4037]">コミュニティ</h4>
+                            <p class="text-sm text-[#3E2723]">負の環境影響を低減し、コミュニティの発展に参加し、共同繁栄を実現する。</p>
+                        </div>
+                    </div>
+                     <p class="text-[#3E2723] mt-6 leading-relaxed"><strong>解決すべき主要課題：</strong>価格手頃さと持続可能性のバランス、サプライチェーンにおける公正な労働、環境正義の実現、持続可能な価値の効果的な伝達と消費者教育。</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="knowledge-vision" class="py-12 md:py-16 bg-[#FFF8E7] scroll-margin-top">
+            <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+                <h2 class="text-3xl md:text-4xl font-semibold section-title mb-8 text-center">中核的知的ビジョン：持続可能なアパレル産業の知的基盤構築</h2>
+                <p class="text-lg text-center text-[#3E2723] mb-10 max-w-3xl mx-auto leading-relaxed">
+                    2035年、知識、特に体系的な創造、統合、応用を通じて形成される知的資本は、アパレル企業が危機に対応し、優位性を再構築し、未来をリードするための核心的な戦略資源となります。本章では、2035年のアパレル企業が知識創造においてどのようなビジョンを抱くのかを深く探求します。
+                </p>
+
+                <div class="mb-8">
+                    <div class="flex flex-wrap justify-center border-b border-gray-300">
+                        <button class="kv-tab-button tab-button py-3 px-6 font-medium text-gray-600 border-b-2 border-transparent hover:text-[#FFAB40] hover:border-[#FFAB40] focus:outline-none active" data-target="kv-materials">持続可能な素材と技術</button>
+                        <button class="kv-tab-button tab-button py-3 px-6 font-medium text-gray-600 border-b-2 border-transparent hover:text-[#FFAB40] hover:border-[#FFAB40] focus:outline-none" data-target="kv-ai-production">AI駆動のクリーン生産</button>
+                        <button class="kv-tab-button tab-button py-3 px-6 font-medium text-gray-600 border-b-2 border-transparent hover:text-[#FFAB40] hover:border-[#FFAB40] focus:outline-none" data-target="kv-circular-models">循環型ビジネスモデル</button>
+                        <button class="kv-tab-button tab-button py-3 px-6 font-medium text-gray-600 border-b-2 border-transparent hover:text-[#FFAB40] hover:border-[#FFAB40] focus:outline-none" data-target="kv-consumer-education">AIによる消費者教育支援</button>
+                        <button class="kv-tab-button tab-button py-3 px-6 font-medium text-gray-600 border-b-2 border-transparent hover:text-[#FFAB40] hover:border-[#FFAB40] focus:outline-none" data-target="kv-workforce">未来の労働力と組織</button>
+                    </div>
+                </div>
+
+                <div id="kv-materials" class="kv-tab-content">
+                    <h3 class="text-2xl card-title mb-6 text-center">革命的な持続可能素材と繊維技術革新</h3>
+                    <p class="text-[#3E2723] mb-6 leading-relaxed text-center max-w-2xl mx-auto">素材はアパレル産業の源流であり、その環境フットプリントの主要な貢献者の一つです。したがって、素材分野の知識革新はカーボンニュートラル実現の最重要課題です。</p>
+                    <div class="flex justify-center mb-6 space-x-2">
+                         <button class="material-filter-btn btn-accent px-4 py-2 rounded-md text-sm active" data-filter="all">すべて</button>
+                         <button class="material-filter-btn btn-accent px-4 py-2 rounded-md text-sm" data-filter="bio">バイオベース</button>
+                         <button class="material-filter-btn btn-accent px-4 py-2 rounded-md text-sm" data-filter="recycled">リサイクル</button>
+                         <button class="material-filter-btn btn-accent px-4 py-2 rounded-md text-sm" data-filter="smart">スマート機能</button>
+                    </div>
+                    <div id="materialsContainer" class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+                        </div>
+                </div>
+
+                <div id="kv-ai-production" class="kv-tab-content hidden">
+                    <h3 class="text-2xl card-title mb-6 text-center">AI駆動のスマートクリーン生産と運営</h3>
+                    <p class="text-[#3E2723] mb-6 leading-relaxed text-center max-w-2xl mx-auto">AIは2035年、アパレル産業がクリーン生産と効率的な運営を実現するために不可欠な技術エンジンとなり、その応用はエネルギー管理からサプライチェーン協調に至る各段階に及びます。</p>
+                     <div class="chart-container">
+                        <canvas id="aiApplicationsChart"></canvas>
+                    </div>
+                    <p class="text-sm text-gray-600 mb-6 text-center">図3：アパレル産業バリューチェーン各段階におけるAI応用潜在力（概念図）</p>
+                    <div id="aiApplicationsContainer" class="space-y-4">
+                         <p class="text-[#3E2723] leading-relaxed">AIは素材開発（新素材発見の加速）、デザイン（持続可能なデザイン、バーチャルサンプリング）、調達（サプライヤー評価）、生産製造（エネルギー消費最適化、精密制御、スマート品質検査）、物流倉庫（ルート最適化、在庫管理）、小売（個別化推薦、バーチャル試着）、そして消費後管理（古着回収、アップサイクル）など、バリューチェーン全体で重要な役割を果たし、炭素フットプリントの精密な算定と追跡を実現します。中核となるAI技術には、機械学習、深層学習、コンピュータビジョン、自然言語処理などがあります。</p>
+                    </div>
+                </div>
+
+                <div id="kv-circular-models" class="kv-tab-content hidden">
+                    <h3 class="text-2xl card-title mb-6 text-center">循環型ビジネスモデル革新とバリューチェーン再構築</h3>
+                    <p class="text-[#3E2723] mb-6 leading-relaxed text-center max-w-2xl mx-auto">カーボンニュートラルの実現は技術レベルの革新だけでなく、従来の線形モデルから「クローズドループ」の循環型経済モデルへの根本的なビジネスモデル転換も必要とします。</p>
+                    <div class="grid md:grid-cols-3 gap-6 text-center">
+                        <div class="card p-4">
+                            <h4 class="font-semibold text-lg text-[#5D4037] mb-2">耐久性と循環性のためのデザイン</h4>
+                            <p class="text-sm text-[#3E2723]">モジュール設計、修理容易設計、分解容易設計が主流に。デジタル製品パスポートが重要な情報基盤を提供。</p>
+                        </div>
+                        <div class="card p-4">
+                            <h4 class="font-semibold text-lg text-[#5D4037] mb-2">AIによる再販・レンタル・カスタマイズ支援</h4>
+                            <p class="text-sm text-[#3E2723]">スマートな中古取引・レンタルプラットフォーム、AI支援のオンデマンド生産と個別化カスタマイズで廃棄物を削減。</p>
+                        </div>
+                        <div class="card p-4">
+                            <h4 class="font-semibold text-lg text-[#5D4037] mb-2">効率的な逆物流とリサイクル</h4>
+                            <p class="text-sm text-[#3E2723]">AIが回収ネットワーク計画と物流配分を最適化、個別化された消費者インセンティブメカニズムで回収効率を向上。</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="kv-consumer-education" class="kv-tab-content hidden">
+                    <h3 class="text-2xl card-title mb-6 text-center">AIによる消費者環境理念普及と個別化インタラクション支援</h3>
+                    <p class="text-[#3E2723] mb-6 leading-relaxed">「消費者は価格に関心があり、環境配慮型素材は価格上昇につながるため、AI技術を通じてどのように環境理念を普及させるか」という核心的な問題解決には、企業が知識経営レベルで深く革新する必要があり、AIはそのための前例のない可能性を提供します。</p>
+                    <div class="space-y-4 text-[#3E2723]">
+                        <div class="card p-4">
+                            <h4 class="font-semibold text-lg text-[#5D4037] mb-2">個別化された持続可能性情報と教育</h4>
+                            <p class="text-sm">AI駆動のコンテンツ精密配信。ユーザープロファイルに基づき、関連性の高い持続可能なファッション知識、環境配慮型ライフスタイル提案、ブランド実践事例を提供。インタラクティブ学習とバーチャル体験（AIチャットボット、環境配慮型生産のVR/AR見学）。</p>
+                        </div>
+                        <div class="card p-4">
+                            <h4 class="font-semibold text-lg text-[#5D4037] mb-2">透明性とトレーサビリティ向上による信頼醸成</h4>
+                            <p class="text-sm">AI支援の製品情報検証システム。ブロックチェーンと連携し、全工程（原材料、生産、物流）の情報を追跡。効果的な「グリーンウォッシング」対策、消費行動の積極的な環境影響を個別化して定量表示。</p>
+                        </div>
+                        <div class="card p-4">
+                            <h4 class="font-semibold text-lg text-[#5D4037] mb-2">価格感応性問題解決のコミュニケーション戦略：「価格アンカリング」から「価値アンカリング」へ</h4>
+                            <p class="text-sm">AI支援の価値コミュニケーション。消費者の状況に応じて、環境配慮型製品のライフサイクル全体での総合的価値（耐久性、多機能性、低メンテナンスコスト、再販/リサイクル価値）を説明。例えば、経済性を重視する消費者には長期的な「お得感」を、健康に関心のある消費者には無毒無害を強調。許容価格範囲内の持続可能な製品や代替消費モデル（レンタル、中古）を個別化推薦。</p>
+                            <p class="text-sm mt-2"><strong>中核理念：</strong>AIの深いデータ洞察と個別化されたシナリオ構築を活用し、「ライフサイクル全体での価値の物語化」を実現する。これはAIが知識経営と消費者教育において最も潜在力を持つ方向性である。</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div id="kv-workforce" class="kv-tab-content hidden">
+                    <h3 class="text-2xl card-title mb-6 text-center">未来の労働力スキルアップと組織アジリティ</h3>
+                    <p class="text-[#3E2723] mb-6 leading-relaxed text-center max-w-2xl mx-auto">アパレル産業のカーボンニュートラルと持続可能な開発への転換は、必然的に労働力スキル需要の深刻な変革と、組織能力・文化への新たな要求を伴います。</p>
+                     <div class="grid md:grid-cols-2 gap-6">
+                        <div class="card p-4">
+                            <h4 class="font-semibold text-lg text-[#5D4037] mb-2">新たなスキル需要</h4>
+                            <ul class="list-disc list-inside space-y-1 text-sm text-[#3E2723]">
+                                <li>データリテラシーとAI応用能力</li>
+                                <li>循環型経済の専門知識（循環設計、素材評価、ライフサイクル管理）</li>
+                                <li>持続可能な開発とESG知識</li>
+                                <li>学際的協調とコミュニケーション能力</li>
+                                <li>継続学習、イノベーション、複雑な問題解決能力</li>
+                            </ul>
+                        </div>
+                        <div class="card p-4">
+                            <h4 class="font-semibold text-lg text-[#5D4037] mb-2">組織変革とリーダーシップ</h4>
+                            <ul class="list-disc list-inside space-y-1 text-sm text-[#3E2723]">
+                                <li>持続可能なリーダーシップ：戦略的視点、システム思考、共感力、強靭性、長期的コミットメント。</li>
+                                <li>変革管理能力：アジャイルな組織構造、効率的なプロセス、インセンティブメカニズム、コミュニケーション参加戦略。</li>
+                                <li>オープンで協調的な知識エコシステムの育成：イノベーションアライアンスへの参加、産学連携の深化、適度な知識共有。</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="knowledge-strategy" class="py-12 md:py-16 scroll-margin-top">
+            <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+                <h2 class="text-3xl md:text-4xl font-semibold section-title mb-8 text-center">知的戦略設計：価値の創造・保護・伝達</h2>
+                 <p class="text-lg text-center text-[#3E2723] mb-10 max-w-3xl mx-auto leading-relaxed">
+                    知的ビジョンを明確にした後、重要なのは、そのビジョンを確実に実現し、最終的に企業の持続可能な競争優位性と商業的価値に転換するための、効果的かつ実行可能な知的戦略をどのように設計するかです。
+                </p>
+                <div class="mb-8">
+                    <div class="flex flex-wrap justify-center border-b border-gray-300">
+                        <button class="ks-tab-button tab-button py-3 px-6 font-medium text-gray-600 border-b-2 border-transparent hover:text-[#FFAB40] hover:border-[#FFAB40] focus:outline-none active" data-target="ks-creation">創造と獲得</button>
+                        <button class="ks-tab-button tab-button py-3 px-6 font-medium text-gray-600 border-b-2 border-transparent hover:text-[#FFAB40] hover:border-[#FFAB40] focus:outline-none" data-target="ks-protection">保護と共有</button>
+                        <button class="ks-tab-button tab-button py-3 px-6 font-medium text-gray-600 border-b-2 border-transparent hover:text-[#FFAB40] hover:border-[#FFAB40] focus:outline-none" data-target="ks-communication">コミュニケーションと価値伝達</button>
+                    </div>
+                </div>
+
+                <div id="ks-creation" class="ks-tab-content">
+                    <div class="card p-6">
+                        <h3 class="text-xl card-title mb-3">知識創造と獲得の多角的メカニズム</h3>
+                        <ul class="list-disc list-inside space-y-2 text-[#3E2723]">
+                            <li>内部研究開発（R&D）体制の強化、専門の持続可能イノベーション部門設立。</li>
+                            <li>全従業員参加型イノベーション文化の育成。</li>
+                            <li>外部の知識・技術資源の積極的統合、スタートアップ企業との連携・投資。</li>
+                            <li>産学連携の深化、基礎研究・応用研究成果の獲得。</li>
+                            <li>技術ライセンス供与や特許買収による技術的弱点の補完。</li>
+                            <li>業界アライアンス、標準化団体、オープンソースコミュニティへの参加。</li>
+                        </ul>
+                    </div>
+                </div>
+                <div id="ks-protection" class="ks-tab-content hidden">
+                    <div class="card p-6">
+                        <h3 class="text-xl card-title mb-3">持続可能な開発パラダイム下での知的財産（IP）保護と共有</h3>
+                        <ul class="list-disc list-inside space-y-2 text-[#3E2723]">
+                            <li>特許ポートフォリオ：中核的環境配慮型素材、クリーン生産プロセス、AIアルゴリズム、循環技術。</li>
+                            <li>商標とブランド構築：持続可能性理念の組込み、独自商標・認証マークの登録。</li>
+                            <li>意匠権保護：持続可能性を考慮したオリジナルデザインの保護。</li>
+                            <li>営業秘密保護：独自の技術ノウハウ、中核的プロセスパラメータ、AI訓練データなどの保護。</li>
+                            <li>IP保護とオープンイノベーション、循環利用ニーズの慎重なバランス、差別化IP戦略の実施。</li>
+                            <li>循環型経済を支援するIP実践、修理・改修・アップサイクルのための余地確保。</li>
+                            <li>共同研究開発におけるIP共有メカニズムの構築。</li>
+                        </ul>
+                    </div>
+                </div>
+                <div id="ks-communication" class="ks-tab-content hidden">
+                    <div class="card p-6">
+                        <h3 class="text-xl card-title mb-3">持続可能な知識の価値コミュニケーションと商業的転換</h3>
+                        <ul class="list-disc list-inside space-y-2 text-[#3E2723]">
+                            <li>透明性のある報告と多角的ステークホルダーコミュニケーション：信頼できるデータに基づくESGパフォーマンス開示。</li>
+                            <li>多チャネル、ストーリーテリング型コミュニケーションの活用、感情的つながりと価値共感の強化。</li>
+                            <li>知識を製品・サービスの付加価値能力に転換。</li>
+                            <li>知識サービスと業界エンパワーメントの展開、他企業へのコンサルティング、技術移転など。</li>
+                            <li>データ駆動型の新しいビジネスモデルの探求、個別化サブスクリプション、動的価格設定など。</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="outlook" class="py-12 md:py-16 bg-[#FFF8E7] scroll-margin-top">
+            <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+                <h2 class="text-3xl md:text-4xl font-semibold section-title mb-8 text-center">将来展望：カーボンニュートラルと知識駆動型アパレル産業へ</h2>
+                <p class="text-lg text-[#3E2723] mb-6 leading-relaxed">
+                    2035年のアパレル産業において、知識革新はカーボンニュートラルの課題に対応し、持続可能な開発を実現するための核心的なエンジンであり、AI技術はそのエンジンを効率的に稼働させるための重要な支援ツールです。真にカーボンニュートラルを実現し、知識によって駆動されるアパレル産業は、環境配慮と商業的繁栄が対立せず、循環型経済が主流となり、社会的責任が企業遺伝子に深く組み込まれ、消費者が持続可能な変革の積極的な参加者となる未来像を提示します。
+                </p>
+                <h3 class="text-2xl card-title mt-10 mb-6 text-center">戦略的提言</h3>
+                <div class="grid md:grid-cols-3 gap-6">
+                    <div class="card p-4">
+                        <h4 class="font-semibold text-lg text-[#5D4037] mb-2">企業向け</h4>
+                        <ul class="list-disc list-inside text-sm text-[#3E2723] space-y-1">
+                            <li>戦略的高度からの変革推進。</li>
+                            <li>知識革新への投資拡大。</li>
+                            <li>アジャイルな学習型組織の構築。</li>
+                            <li>持続可能な知識エコシステムの共創。</li>
+                            <li>ビジネスモデルと価値コミュニケーションの革新。</li>
+                        </ul>
+                    </div>
+                    <div class="card p-4">
+                        <h4 class="font-semibold text-lg text-[#5D4037] mb-2">政策立案者向け</h4>
+                        <ul class="list-disc list-inside text-sm text-[#3E2723] space-y-1">
+                            <li>政策・法規制枠組みの整備。</li>
+                            <li>技術研究開発と普及支援。</li>
+                            <li>インフラ整備の強化。</li>
+                            <li>標準・認証システムの統一推進。</li>
+                        </ul>
+                    </div>
+                    <div class="card p-4">
+                        <h4 class="font-semibold text-lg text-[#5D4037] mb-2">研究・教育システム向け</h4>
+                        <ul class="list-disc list-inside text-sm text-[#3E2723] space-y-1">
+                            <li>関連学科建設と人材育成の強化。</li>
+                            <li>産学連携による協調的イノベーションの深化。</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="bg-[#5D4037] text-[#FAF3E0] py-8 mt-16">
+        <div class="container mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <p>&copy; 2025 アパレル産業将来展望レポート。著作権所有。</p>
+            <p class="text-sm mt-1">提供された業界分析レポートに基づき作成されたインタラクティブ体験。</p>
+        </div>
+    </footer>
+
+    <div id="materialModal" class="modal">
+        <div class="modal-content">
+            <span class="close-button" onclick="closeModal('materialModal')">&times;</span>
+            <h3 id="modalTitle" class="text-2xl card-title mb-4">素材詳細</h3>
+            <div id="modalBody" class="text-[#3E2723]"></div>
+        </div>
+    </div>
+
+<script>
+    // Navigation and Mobile Menu
+    const mobileMenuButton = document.getElementById('mobile-menu-button');
+    const mobileMenu = document.getElementById('mobile-menu');
+    mobileMenuButton.addEventListener('click', () => {
+        mobileMenu.classList.toggle('hidden');
+    });
+
+    document.querySelectorAll('nav a[href^="#"], #mobile-menu a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener('click', function (e) {
+            e.preventDefault();
+            mobileMenu.classList.add('hidden'); // Close mobile menu on click
+            const targetId = this.getAttribute('href');
+            const targetElement = document.querySelector(targetId);
+            if (targetElement) {
+                targetElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                
+                document.querySelectorAll('nav a[href^="#"], #mobile-menu a[href^="#"]').forEach(link => link.classList.remove('active'));
+                this.classList.add('active');
+                document.querySelector(`nav a[href="${targetId}"]`)?.classList.add('active');
+            }
+        });
+    });
+    
+    const sections = document.querySelectorAll('section[id]');
+    const navLinks = document.querySelectorAll('nav a[href^="#"]');
+    const mobileNavLinks = document.querySelectorAll('#mobile-menu a[href^="#"]');
+
+    function changeNavOnScroll() {
+        let current = '';
+        sections.forEach(section => {
+            const sectionTop = section.offsetTop;
+            if (pageYOffset >= sectionTop - 80) { 
+                current = section.getAttribute('id');
+            }
+        });
+
+        navLinks.forEach(link => {
+            link.classList.remove('active');
+            if (link.getAttribute('href').substring(1) === current) {
+                link.classList.add('active');
+            }
+        });
+        mobileNavLinks.forEach(link => {
+            link.classList.remove('active');
+            if (link.getAttribute('href').substring(1) === current) {
+                link.classList.add('active');
+            }
+        });
+    }
+    window.addEventListener('scroll', changeNavOnScroll);
+
+    function setupTabs(buttonClass, contentClassPrefix) {
+        const tabButtons = document.querySelectorAll(`.${buttonClass}`);
+        const tabContents = document.querySelectorAll(`.${contentClassPrefix}`);
+
+        tabButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                tabButtons.forEach(btn => btn.classList.remove('active'));
+                button.classList.add('active');
+                const target = button.dataset.target;
+                tabContents.forEach(content => {
+                    if (content.id === target) {
+                        content.classList.remove('hidden');
+                    } else {
+                        content.classList.add('hidden');
+                    }
+                });
+            });
+        });
+    }
+    setupTabs('kv-tab-button', 'kv-tab-content');
+    setupTabs('ks-tab-button', 'ks-tab-content');
+
+    const managementChallenges = [
+        { title: "変革コスト", description: "環境配慮型素材、技術投資の高騰。中小企業の財務圧力増大。影響：投資回収期間の長期化、資金調達難、短期的な収益性への挑戦。" },
+        { title: "サプライチェーン管理", description: "サプライチェーンは長く複雑で、外部委託先のエネルギー構造は高炭素。Scope3排出量の追跡管理が困難。影響：炭素フットプリント算定の難易度高く、サプライチェーン協調での排出削減課題多し。" },
+        { title: "技術導入", description: "新技術の研究開発・応用サイクルは長く、コスト高で標準も不足。影響：技術選定リスク、投資の不確実性、人材不足。" },
+        { title: "市場受容性", description: "環境配慮型製品は価格が高めで、消費者の価格感応度は依然として存在。影響：製品競争力が価格に影響され、マーケティングとビジネスモデルの革新が必要。" }
+    ];
+
+    const managementChallengesContainer = document.getElementById('managementChallengesContainer');
+    managementChallenges.forEach(challenge => {
+        const div = document.createElement('div');
+        div.className = 'card p-4 hover:shadow-lg transition-shadow';
+        div.innerHTML = `
+            <details>
+                <summary class="font-semibold text-lg text-[#5D4037] cursor-pointer">${challenge.title}</summary>
+                <p class="text-sm text-[#3E2723] mt-2">${challenge.description}</p>
+            </details>
+        `;
+        managementChallengesContainer.appendChild(div);
+    });
+
+    const materialsData = [
+        { name: "菌糸レザー", type: "bio", details: "原料：菌糸体。性能：革に似た質感、通気性、生分解性。コスト/成熟度：中～高。炭素削減：動物皮革/PU/PVCの代替、靴、バッグに使用。炭素フットプリントと水フットプリントを大幅に削減。", knowledge: "材料科学、バイオテクノロジー、化学工学。課題：大規模生産、コスト管理、性能安定性。" },
+        { name: "藻類繊維", type: "bio", details: "原料：海藻、微細藻類。性能：軽量、吸湿性、一部生分解性。コスト/成熟度：中程度。炭素削減：スポーツウェア、カジュアルウェアに使用。陸上資源への依存を減らし、炭素を固定。", knowledge: "バイオテクノロジー、化学工学、繊維工学。課題：繊維性能の向上、染色適応性。" },
+        { name: "農業廃棄物再生繊維", type: "bio", details: "原料：わら、果物の殻など。性能：天然繊維の特性、生分解性。コスト/成熟度：低～中。炭素削減：カジュアルウェア、ホームテキスタイルに使用。廃棄物の資源化。", knowledge: "材料科学、化学工学、農業科学。課題：原料収集と前処理、繊維強度。" },
+        { name: "化学リサイクルrPET/rナイロン", type: "recycled", details: "原料：廃ポリエステル/ナイロン。性能：バージンに近い、複数回リサイクル可能。コスト/成熟度：中程度、高。炭素削減：広範な用途。石油消費と炭素排出を大幅に削減。", knowledge: "高分子化学、化学工学、自動選別。課題：混紡分離、リサイクル効率とコスト。" },
+        { name: "機械リサイクル綿/羊毛", type: "recycled", details: "原料：廃綿/羊毛繊維製品。性能：繊維が短くなる可能性、強度の低下。コスト/成熟度：低～中、高。炭素削減：デニム、セーターに使用。バージン繊維への圧力を軽減。", knowledge: "機械工学、繊維工学。課題：繊維損傷の抑制、品質向上。" },
+        { name: "無水染色繊維", type: "smart", details: "技術：超臨界流体、プラズマ。性能：節水、省エネ、化学薬品削減。コスト/成熟度：中～高。炭素削減：各種生地の環境配慮型染色。染色仕上げ工程の環境負荷を大幅に低減。", knowledge: "染色化学、プラズマ物理学、装置工学。課題：プロセス安定性、色彩範囲、コスト。" },
+        { name: "自己修復/耐久性強化繊維", type: "smart", details: "技術：マイクロカプセル、特殊織り/コーティング。性能：寿命延長、廃棄物削減。コスト/成熟度：中～高。炭素削減：アウトドアウェア、作業着に使用。交換頻度を削減。", knowledge: "材料科学、ナノテクノロジー、繊維工学。課題：修復効率、耐久性、生体適合性。" }
+    ];
+
+    const materialsContainer = document.getElementById('materialsContainer');
+    const materialModal = document.getElementById('materialModal');
+    const modalTitle = document.getElementById('modalTitle');
+    const modalBody = document.getElementById('modalBody');
+
+    function displayMaterials(filter = 'all') {
+        materialsContainer.innerHTML = '';
+        const filteredMaterials = filter === 'all' ? materialsData : materialsData.filter(m => m.type === filter);
+        
+        if (filteredMaterials.length === 0) {
+            materialsContainer.innerHTML = `<p class="text-center text-[#3E2723] col-span-full">この種類の素材情報はありません。</p>`;
+            return;
+        }
+
+        filteredMaterials.forEach(material => {
+            const card = document.createElement('div');
+            card.className = 'card p-5 text-center cursor-pointer hover:shadow-xl transition-shadow duration-300 ease-in-out';
+            card.innerHTML = `
+                <h4 class="text-xl font-semibold card-title mb-2">${material.name}</h4>
+                <p class="text-sm text-[#3E2723]">${material.details.split('。')[0]}。</p>
+            `;
+            card.addEventListener('click', () => openMaterialModal(material));
+            materialsContainer.appendChild(card);
+        });
+    }
+
+    function openMaterialModal(material) {
+        modalTitle.textContent = material.name;
+        let typeJp = '';
+        if (material.type === 'bio') typeJp = 'バイオベース';
+        else if (material.type === 'recycled') typeJp = 'リサイクル';
+        else if (material.type === 'smart') typeJp = 'スマート機能';
+
+        modalBody.innerHTML = `
+            <p><strong>タイプ：</strong> ${typeJp}</p>
+            <p><strong>詳細：</strong> ${material.details}</p>
+            <p class="mt-2"><strong>関連知識分野と研究開発課題：</strong> ${material.knowledge}</p>
+        `;
+        materialModal.style.display = 'block';
+    }
+
+    function closeModal(modalId) {
+        document.getElementById(modalId).style.display = 'none';
+    }
+    
+    document.querySelectorAll('.material-filter-btn').forEach(button => {
+        button.addEventListener('click', () => {
+            document.querySelectorAll('.material-filter-btn').forEach(btn => btn.classList.remove('active', 'bg-[#FF8F00]'));
+            button.classList.add('active', 'bg-[#FF8F00]');
+            displayMaterials(button.dataset.filter);
+        });
+    });
+
+    displayMaterials();
+    if (document.querySelector('.kv-tab-button')) document.querySelector('.kv-tab-button').click();
+    if (document.querySelector('.ks-tab-button')) document.querySelector('.ks-tab-button').click();
+
+    const emissionsCtx = document.getElementById('emissionsChart')?.getContext('2d');
+    if (emissionsCtx) {
+        new Chart(emissionsCtx, {
+            type: 'pie',
+            data: {
+                labels: ['アパレル産業の炭素排出量', 'その他の産業の炭素排出量'],
+                datasets: [{
+                    label: '炭素排出割合',
+                    data: [10, 90],
+                    backgroundColor: ['#FFAB40', '#AED581'],
+                    borderColor: ['#FAF3E0', '#FAF3E0'],
+                    borderWidth: 2
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    title: { display: true, text: '世界の産業炭素排出量におけるアパレル産業の割合（出典：レポート[1]）', color: '#3E2723' },
+                    legend: { position: 'bottom', labels: { color: '#3E2723'} },
+                     tooltip: {
+                        callbacks: {
+                            label: function(context) {
+                                let label = context.label || '';
+                                if (label) {
+                                    label += ': ';
+                                }
+                                if (context.parsed !== null) {
+                                    label += context.parsed + '%';
+                                }
+                                return label;
+                            }
+                        }
+                    }
+                }
+            }
+        });
+    }
+
+    const wasteCtx = document.getElementById('wasteChart')?.getContext('2d');
+    if (wasteCtx) {
+        new Chart(wasteCtx, {
+            type: 'bar',
+            data: {
+                labels: ['EU年間繊維廃棄物（百万トン）', '世界の繊維リサイクル率（%）'],
+                datasets: [{
+                    label: '繊維廃棄物とリサイクル',
+                    data: [12.6, 0.8],
+                    backgroundColor: ['#90CAF9', '#FFAB40'],
+                    borderColor: ['#FAF3E0', '#FAF3E0'],
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                indexAxis: 'y',
+                scales: {
+                    x: { ticks: { color: '#3E2723' }, grid: { color: 'rgba(62,39,35,0.1)' } },
+                    y: { ticks: { color: '#3E2723', callback: function(value, index, values) {
+                        const label = this.getLabelForValue(value);
+                        if (label.length > 16) return label.substring(0,16) + '...';
+                        return label;
+                    }}, grid: { display: false } }
+                },
+                plugins: {
+                    title: { display: true, text: '繊維廃棄物発生量とリサイクル率（出典：レポート[3]）', color: '#3E2723' },
+                    legend: { display: false },
+                    tooltip: {
+                        callbacks: {
+                            label: function(context) {
+                                let label = context.dataset.label || '';
+                                if (label) {
+                                    label += ': ';
+                                }
+                                if (context.parsed.x !== null) {
+                                     label += context.parsed.x + (context.label.includes('%') ? '%' : ' 百万トン');
+                                }
+                                return label;
+                            }
+                        }
+                    }
+                }
+            }
+        });
+    }
+
+    const aiApplicationsCtx = document.getElementById('aiApplicationsChart')?.getContext('2d');
+    if (aiApplicationsCtx) {
+        new Chart(aiApplicationsCtx, {
+            type: 'radar',
+            data: {
+                labels: ['素材開発', 'デザイン', '調達', '生産製造', '物流倉庫', '小売', '消費後管理', '炭素会計'],
+                datasets: [{
+                    label: 'AI応用ポテンシャル',
+                    data: [85, 70, 75, 90, 80, 85, 70, 95],
+                    fill: true,
+                    backgroundColor: 'rgba(255, 171, 64, 0.2)',
+                    borderColor: '#FFAB40',
+                    pointBackgroundColor: '#FFAB40',
+                    pointBorderColor: '#fff',
+                    pointHoverBackgroundColor: '#fff',
+                    pointHoverBorderColor: '#FFAB40'
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    r: {
+                        angleLines: { color: 'rgba(62,39,35,0.2)' },
+                        grid: { color: 'rgba(62,39,35,0.2)' },
+                        pointLabels: { 
+                            font: { size: 10 }, color: '#3E2723',
+                            callback: function(label) {
+                                if (label.length > 10) return label.match(/.{1,10}/g).join('\n');
+                                return label;
+                            }
+                        },
+                        ticks: { backdropColor: 'transparent', color: '#3E2723', stepSize:20 }
+                    }
+                },
+                plugins: {
+                    title: { display: true, text: 'バリューチェーン各段階におけるAI応用ポテンシャル評価', color: '#3E2723' },
+                    legend: { display: false }
+                }
+            }
+        });
+    }
+
+    window.addEventListener('keydown', function(event) {
+        if (event.key === 'Escape') {
+            if (materialModal.style.display === 'block') {
+                closeModal('materialModal');
+            }
+        }
+    });
+    window.addEventListener('click', function(event) {
+        if (event.target == materialModal) {
+            closeModal('materialModal');
+        }
+    });
+
+</script>
+</body>
+</html>
