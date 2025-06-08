@@ -34,6 +34,23 @@
     button:hover {
       background-color: #45a049;
     }
+    a.video-link {
+      display: block;
+      margin-top: 1em;
+      color: #1e88e5;
+      text-decoration: underline;
+    }
+    input[type="text"] {
+      width: 80%;
+      padding: 0.5em;
+      margin-top: 2em;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+    }
+    #submit-skill {
+      margin-top: 1em;
+      background-color: #2196F3;
+    }
   </style>
 </head>
 <body>
@@ -41,25 +58,33 @@
   <div id="skill-box">加载中...</div>
   <button onclick="generateSkill()">再来一个！</button>
 
+  <h2 style="margin-top:3em;">📤 投稿你的技能</h2>
+  <input type="text" id="newSkill" placeholder="技能标题 | 简介 | 所需时间 | 教学步骤 | 视频链接">
+  <br>
+  <button id="submit-skill" onclick="submitSkill()">提交技能</button>
+
   <script>
     const skills = [
       {
         title: "用扑克牌表演一个魔术",
         description: "掌握基本控牌技巧，表演一个让人惊艳的小魔术。",
         duration: "约2小时",
-        instructions: "准备一副普通扑克牌，学习控制观众选牌的位置，练习'强记'技巧，然后用自然的语言包装整个流程。"
+        instructions: "准备一副普通扑克牌，学习控制观众选牌的位置，练习'强记'技巧，然后用自然的语言包装整个流程。",
+        video: "https://www.youtube.com/watch?v=VBbVbqAt53A"
       },
       {
         title: "用CSS画一个跳动的心形动画",
         description: "用纯CSS做一个可以跳动的爱心，非常适合网页初学者。",
         duration: "约1小时",
-        instructions: "使用HTML中的div元素，搭配border-radius与transform制作心形，再用@keyframes实现跳动效果。"
+        instructions: "使用HTML中的div元素，搭配border-radius与transform制作心形，再用@keyframes实现跳动效果。",
+        video: "https://www.youtube.com/watch?v=RzG0pL6wF2g"
       },
       {
         title: "一分钟学会快速剥鸡蛋",
         description: "通过先用冷水煮蛋，再用冰水急冷，快速剥蛋壳。",
         duration: "10分钟以内",
-        instructions: "将煮熟的鸡蛋放入冰水中冷却一分钟，然后在桌面轻轻敲裂，轻松剥壳。"
+        instructions: "将煮熟的鸡蛋放入冰水中冷却一分钟，然后在桌面轻轻敲裂，轻松剥壳。",
+        video: "https://www.youtube.com/watch?v=XX7V6OkrB6Y"
       }
     ];
 
@@ -70,7 +95,21 @@
         <p><strong>所需时间：</strong> ${randomSkill.duration}</p>
         <p><strong>简介：</strong> ${randomSkill.description}</p>
         <p><strong>教学步骤：</strong> ${randomSkill.instructions}</p>
+        <a class="video-link" href="${randomSkill.video}" target="_blank">▶ 点击观看教学视频</a>
       `;
+    }
+
+    function submitSkill() {
+      const input = document.getElementById("newSkill").value;
+      const parts = input.split("|").map(s => s.trim());
+      if (parts.length !== 5) {
+        alert("请输入完整格式：标题 | 简介 | 所需时间 | 教学步骤 | 视频链接");
+        return;
+      }
+      const [title, description, duration, instructions, video] = parts;
+      skills.push({ title, description, duration, instructions, video });
+      alert("✅ 投稿成功！现在点 '再来一个' 就有机会看到你分享的技能啦。");
+      document.getElementById("newSkill").value = "";
     }
 
     window.onload = generateSkill;
