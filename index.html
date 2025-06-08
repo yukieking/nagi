@@ -1,667 +1,79 @@
 <!DOCTYPE html>
-<html lang="ja">
+<html lang="zh">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>日本の少子高齢化：現状と将来のインフォグラフィック</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <style>
-        body {
-            font-family: 'Noto Sans JP', sans-serif;
-            background-color: #EDF2F4;
-            color: #2B2D42;
-        }
-        .chart-container {
-            position: relative;
-            width: 100%;
-            max-width: 600px;
-            margin-left: auto;
-            margin-right: auto;
-            height: 300px;
-            max-height: 400px;
-        }
-        @media (min-width: 768px) {
-            .chart-container {
-                height: 350px;
-            }
-        }
-        .chart-container-pyramid {
-            position: relative;
-            width: 100%;
-            max-width: 700px;
-            margin-left: auto;
-            margin-right: auto;
-            height: 400px;
-            max-height: 500px;
-        }
-        .section-title {
-            font-size: 2rem;
-            font-weight: bold;
-            margin-bottom: 1rem;
-            color: #023047;
-            text-align: center;
-            padding-top: 1.5rem;
-        }
-        .stat-card {
-            background-color: white;
-            border-radius: 0.5rem;
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
-            padding: 1.5rem;
-            margin-bottom: 1.5rem;
-            text-align: center;
-        }
-        .stat-value {
-            font-size: 3rem;
-            font-weight: bold;
-            color: #FB8500; /* Orange */
-        }
-        .stat-label {
-            font-size: 1rem;
-            color: #023047;
-            margin-top: 0.5rem;
-        }
-        .chart-title {
-            text-align: center;
-            font-size: 1.25rem;
-            font-weight: 600;
-            margin-bottom: 1rem;
-            color: #0077B6; /* Blue */
-        }
-        .prose {
-             max-width: none;
-        }
-        .prose h3 {
-            color: #0077B6;
-            margin-top: 2em;
-            margin-bottom: 0.5em;
-        }
-        .prose p {
-            color: #2B2D42;
-            line-height: 1.75;
-            margin-bottom: 1em;
-        }
-        .prose ul li {
-            color: #2B2D42;
-        }
-        .sticky-nav {
-            position: sticky;
-            top: 0;
-            background-color: rgba(255, 255, 255, 0.9);
-            z-index: 50;
-            padding: 0.5rem 0;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-            backdrop-filter: blur(5px);
-        }
-        .sticky-nav ul {
-            display: flex;
-            justify-content: center;
-            list-style: none;
-            padding: 0;
-            margin: 0;
-            flex-wrap: wrap;
-        }
-        .sticky-nav li a {
-            padding: 0.5rem 1rem;
-            text-decoration: none;
-            color: #0077B6;
-            font-weight: 500;
-            transition: color 0.3s;
-        }
-        .sticky-nav li a:hover {
-            color: #FB8500;
-        }
-    </style>
-    </head>
-<body class="bg-gray-100">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>随机技能生成器</title>
+  <style>
+    body {
+      font-family: "Arial", sans-serif;
+      background-color: #f0f8ff;
+      text-align: center;
+      padding: 2em;
+    }
+    h1 {
+      font-size: 2em;
+    }
+    #skill-box {
+      margin-top: 1em;
+      background: #ffffff;
+      padding: 1.5em;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+    button {
+      margin-top: 2em;
+      padding: 0.8em 1.5em;
+      font-size: 1em;
+      border: none;
+      border-radius: 5px;
+      background-color: #4CAF50;
+      color: white;
+      cursor: pointer;
+    }
+    button:hover {
+      background-color: #45a049;
+    }
+  </style>
+</head>
+<body>
+  <h1>🎲 今天你要学的技能是...</h1>
+  <div id="skill-box">加载中...</div>
+  <button onclick="generateSkill()">再来一个！</button>
 
-    <header class="bg-[#0077B6] text-white py-8 text-center">
-        <h1 class="text-4xl font-bold">日本の少子高齢化</h1>
-        <p class="text-xl mt-2">現状と将来：データに基づく包括的分析インフォグラフィック</p>
-    </header>
+  <script>
+    const skills = [
+      {
+        title: "用扑克牌表演一个魔术",
+        description: "掌握基本控牌技巧，表演一个让人惊艳的小魔术。",
+        duration: "约2小时",
+        instructions: "准备一副普通扑克牌，学习控制观众选牌的位置，练习'强记'技巧，然后用自然的语言包装整个流程。"
+      },
+      {
+        title: "用CSS画一个跳动的心形动画",
+        description: "用纯CSS做一个可以跳动的爱心，非常适合网页初学者。",
+        duration: "约1小时",
+        instructions: "使用HTML中的div元素，搭配border-radius与transform制作心形，再用@keyframes实现跳动效果。"
+      },
+      {
+        title: "一分钟学会快速剥鸡蛋",
+        description: "通过先用冷水煮蛋，再用冰水急冷，快速剥蛋壳。",
+        duration: "10分钟以内",
+        instructions: "将煮熟的鸡蛋放入冰水中冷却一分钟，然后在桌面轻轻敲裂，轻松剥壳。"
+      }
+    ];
 
-    <nav id="navbar" class="sticky-nav">
-        <ul>
-            <li><a href="#section1">概観</a></li>
-            <li><a href="#section2">高齢化</a></li>
-            <li><a href="#section3">少子化</a></li>
-            <li><a href="#section4">将来予測</a></li>
-            <li><a href="#section5">背景要因</a></li>
-            <li><a href="#section6">影響</a></li>
-            <li><a href="#section7">まとめ</a></li>
-        </ul>
-    </nav>
+    function generateSkill() {
+      const randomSkill = skills[Math.floor(Math.random() * skills.length)];
+      document.getElementById("skill-box").innerHTML = `
+        <h2>${randomSkill.title}</h2>
+        <p><strong>所需时间：</strong> ${randomSkill.duration}</p>
+        <p><strong>简介：</strong> ${randomSkill.description}</p>
+        <p><strong>教学步骤：</strong> ${randomSkill.instructions}</p>
+      `;
+    }
 
-    <main class="container mx-auto px-4 py-8">
-        
-        <section id="section1" class="pt-8">
-            <h2 class="section-title">I. 日本の少子高齢化：現在の概観</h2>
-            <div class="prose mx-auto mb-8 p-6 bg-white rounded-lg shadow-md">
-                <p>日本は現在、急速な人口高齢化と持続的な少子化、すなわち「少子高齢化」という深刻な人口動態の課題に直面しています。この現象は、国の社会経済構造全体に広範かつ深遠な影響を及ぼしつつあります。このセクションでは、主要な指標を通じて現状の深刻度を示します。</p>
-            </div>
-
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-                <div class="stat-card">
-                    <div class="stat-value">29.3%</div>
-                    <div class="stat-label">高齢化率 (65歳以上人口の割合)<br>(2024年9月推計)</div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-value">1.20</div>
-                    <div class="stat-label">合計特殊出生率<br>(2023年概数)</div>
-                </div>
-                 <div class="stat-card">
-                    <div class="stat-value">72.7万人</div>
-                    <div class="stat-label">年間出生数<br>(2023年)</div>
-                </div>
-            </div>
-
-            <div class="bg-white rounded-lg shadow-md p-6 mb-8">
-                <h3 class="chart-title">図1：日本の年齢構成（2024年9月推計）</h3>
-                <p class="text-center text-sm text-gray-600 mb-4">総務省統計局「人口推計」（令和6年9月15日現在推計）に基づき、日本の人口の年齢別割合を示しています。高齢者層が全体の約3割を占め、生産年齢人口の割合は6割弱となっています。</p>
-                <div class="chart-container">
-                    <canvas id="ageStructureChart"></canvas>
-                </div>
-            </div>
-        </section>
-
-        <section id="section2" class="pt-8">
-            <h2 class="section-title">II. 高齢化の進行度</h2>
-            <div class="prose mx-auto mb-8 p-6 bg-white rounded-lg shadow-md">
-                <p>日本の人口高齢化は、世界でも類を見ない速度と水準で進行しています。65歳以上人口の割合は世界の200の国・地域中で最も高い水準にあります。ここでは、その歴史的な推移と現状の深刻さを示します。</p>
-            </div>
-            <div class="bg-white rounded-lg shadow-md p-6 mb-8">
-                <h3 class="chart-title">図2：高齢化率の推移（1950年～2024年）</h3>
-                 <p class="text-center text-sm text-gray-600 mb-4">日本の65歳以上人口が総人口に占める割合の推移です。1950年には5%未満でしたが、急速に上昇し、2024年には29.3%に達しています。このグラフは、日本の高齢化がいかに急速に進んできたかを示しています。</p>
-                <div class="chart-container">
-                    <canvas id="agingRateTrendChart"></canvas>
-                </div>
-            </div>
-        </section>
-
-        <section id="section3" class="pt-8">
-            <h2 class="section-title">III. 少子化の深刻度</h2>
-            <div class="prose mx-auto mb-8 p-6 bg-white rounded-lg shadow-md">
-                 <p>高齢化と並行して、日本の少子化も極めて深刻な水準で進行しています。合計特殊出生率は人口維持に必要な水準（約2.07）を大きく下回り、出生数も歴史的な低水準が続いています。晩産化の傾向も少子化に拍車をかけています。</p>
-            </div>
-            <div class="bg-white rounded-lg shadow-md p-6 mb-8">
-                <h3 class="chart-title">図3：合計特殊出生率の推移（1970年～2023年）</h3>
-                <p class="text-center text-sm text-gray-600 mb-4">一人の女性が生涯に産む子供の数の平均を示す合計特殊出生率の推移です。1975年に2.0を下回って以降、長期的な低下傾向が続き、2023年には1.20と過去最低水準を更新しました。</p>
-                <div class="chart-container">
-                    <canvas id="tfrTrendChart"></canvas>
-                </div>
-            </div>
-            <div class="bg-white rounded-lg shadow-md p-6 mb-8">
-                <h3 class="chart-title">図4：出生数の推移（1975年～2023年）</h3>
-                <p class="text-center text-sm text-gray-600 mb-4">年間の出生数を示します。1970年代前半の第二次ベビーブーム期には200万人を超えていましたが、その後減少し続け、2023年には約72.7万人と過去最少となりました。</p>
-                <div class="chart-container">
-                    <canvas id="birthsTrendChart"></canvas>
-                </div>
-            </div>
-        </section>
-
-        <section id="section4" class="pt-8">
-            <h2 class="section-title">IV. 少子高齢化の将来展望</h2>
-            <div class="prose mx-auto mb-8 p-6 bg-white rounded-lg shadow-md">
-                <p>国立社会保障・人口問題研究所の推計によると、日本の少子高齢化は将来に向けてさらに進行します。総人口は減少し続け、高齢化率は一層上昇し、社会を支える現役世代の負担はますます重くなると予測されています。</p>
-            </div>
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
-                <div class="bg-white rounded-lg shadow-md p-6">
-                    <h3 class="chart-title">図5：総人口の将来推移（2020年～2070年）</h3>
-                    <p class="text-center text-sm text-gray-600 mb-4">日本の総人口は2020年の1億2,615万人から、2056年には1億人を割り込み、2070年には8,700万人にまで減少すると見込まれています（中位推計）。</p>
-                    <div class="chart-container">
-                        <canvas id="populationProjectionChart"></canvas>
-                    </div>
-                </div>
-                <div class="bg-white rounded-lg shadow-md p-6">
-                    <h3 class="chart-title">図6：高齢化率の将来推移（2020年～2070年）</h3>
-                    <p class="text-center text-sm text-gray-600 mb-4">高齢化率は2020年の28.6％から、2070年には38.7％に達すると推計されています（中位推計）。国民の約5人に2人が65歳以上という社会が到来します。</p>
-                    <div class="chart-container">
-                        <canvas id="agingRateProjectionChart"></canvas>
-                    </div>
-                </div>
-            </div>
-            <div class="bg-white rounded-lg shadow-md p-6 mb-8">
-                <h3 class="chart-title">図7：高齢者扶養比率の推移と将来推計</h3>
-                <p class="text-center text-sm text-gray-600 mb-4">65歳以上人口を15～64歳人口で割った高齢者扶養比率の推移です。1950年には現役世代12.1人で高齢者1人を支えていましたが、2023年には2.0人、2070年には1.3人で1人を支える社会になると予測されています。</p>
-                <div class="chart-container">
-                    <canvas id="dependencyRatioChart"></canvas>
-                </div>
-            </div>
-            <div class="bg-white rounded-lg shadow-md p-6 mb-8">
-                <h3 class="chart-title">図8：人口ピラミッドの変遷（1990年・2020年・2070年推計）</h3>
-                <p class="text-center text-sm text-gray-600 mb-4">人口ピラミッドは、少子高齢化の進行に伴い、底辺の狭い「つぼ型」から、さらに上部が膨らんだ「逆ピラミッド型」へと変化していく様子を示しています。</p>
-                <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-                    <div>
-                        <h4 class="text-center font-semibold text-gray-700">1990年</h4>
-                        <div class="chart-container-pyramid" style="height:300px; max-height:350px;">
-                            <canvas id="populationPyramid1990"></canvas>
-                        </div>
-                    </div>
-                    <div>
-                        <h4 class="text-center font-semibold text-gray-700">2020年</h4>
-                        <div class="chart-container-pyramid" style="height:300px; max-height:350px;">
-                            <canvas id="populationPyramid2020"></canvas>
-                        </div>
-                    </div>
-                    <div>
-                        <h4 class="text-center font-semibold text-gray-700">2070年 (推計)</h4>
-                        <div class="chart-container-pyramid" style="height:300px; max-height:350px;">
-                            <canvas id="populationPyramid2070"></canvas>
-                        </div>
-                    </div>
-                </div>
-            </div>
-             <div class="bg-white rounded-lg shadow-md p-6 mb-8">
-                <h3 class="chart-title">図9：将来の合計特殊出生率の仮定（実績～2070年）</h3>
-                 <p class="text-center text-sm text-gray-600 mb-4">国立社会保障・人口問題研究所の推計（令和5年推計）における将来の合計特殊出生率の仮定（低位・中位・高位）です。中位推計では2070年に1.36と仮定されており、人口置換水準（約2.07）には遠く及びません。</p>
-                <div class="chart-container">
-                    <canvas id="tfrProjectionChart"></canvas>
-                </div>
-            </div>
-        </section>
-
-        <section id="section5" class="pt-8">
-            <h2 class="section-title">V. 少子高齢化の背景にある主な要因</h2>
-            <div class="prose mx-auto p-6 bg-white rounded-lg shadow-md">
-                <p>日本の深刻な少子高齢化は、複合的な要因が長期間にわたり相互に影響し合った結果です。主な要因として以下が挙げられます。</p>
-                <ul>
-                    <li><span class="font-bold text-[#0077B6]">💍 晩婚化・非婚化の進行：</span> 平均初婚年齢の上昇や生涯未婚率の高まりが出生機会を減少させています。</li>
-                    <li><span class="font-bold text-[#0077B6]">💼 仕事と育児の両立の困難さ：</span> 長時間労働、育児・家事負担の偏り、保育サービス不足などが、キャリアと出産・育児の両立を難しくしています。</li>
-                    <li><span class="font-bold text-[#0077B6]">💰 経済的要因：</span> 子育て費用の負担感、若年層の雇用の不安定化、実質賃金の伸び悩みなどが結婚や出産を制約しています。</li>
-                    <li><span class="font-bold text-[#0077B6]">👵 平均寿命の延伸と死亡率の低下：</span> 医学の進歩等による長寿化は喜ばしいことですが、出生数減少下では高齢化を加速させます。</li>
-                </ul>
-                <p>これらの要因は単独ではなく、互いに複雑に絡み合い、日本の人口動態を形成しています。</p>
-            </div>
-        </section>
-
-        <section id="section6" class="pt-8">
-            <h2 class="section-title">VI. 少子高齢化が社会経済に与える影響</h2>
-            <div class="prose mx-auto p-6 bg-white rounded-lg shadow-md">
-                <p>少子高齢化の進行は、日本の社会経済システム全般にわたり、多岐かつ深刻な影響を及ぼしています。その影響は国の持続可能性そのものに関わる問題です。</p>
-                <ul>
-                    <li><span class="font-bold text-[#FB8500]">📉 労働力人口の減少と経済への影響：</span> 生産年齢人口の大幅な減少は、労働力不足、経済成長の鈍化、国内市場の縮小、国際競争力の低下などを招く可能性があります。</li>
-                    <li><span class="font-bold text-[#FB8500]">🏦 社会保障制度への負担増大：</span> 年金、医療、介護などの社会保障制度は、支え手と受け手のバランスが悪化し、現役世代の負担増大や給付水準維持の困難化に直面しています。</li>
-                    <li><span class="font-bold text-[#FB8500]">🏘️ 地域社会の変化と課題：</span> 特に地方では過疎化が進行し、集落機能や生活インフラの維持が困難になっています。空き家問題も深刻です。</li>
-                </ul>
-                 <p>これらの影響は相互に関連し、負のスパイラルを生み出す危険性もはらんでいます。</p>
-            </div>
-        </section>
-
-        <section id="section7" class="pt-8">
-            <h2 class="section-title">VII. まとめと展望</h2>
-            <div class="prose mx-auto p-6 bg-white rounded-lg shadow-md">
-                <p>本インフォグラフィックで示した各種データは、日本の少子高齢化が既に深刻な「程度」に達しており、将来に向けてさらにその度合いを増していくという厳しい現実を明確に示しています。2024年時点で高齢化率は29.3％、2023年の合計特殊出生率は1.20です。2070年には総人口が8,700万人まで減少し、高齢化率は38.7％に達すると見込まれています。現役世代1.3人で高齢者1人を支える社会が到来すると予測されています。</p>
-                <p>これらの数値は、日本の社会経済システムの根幹を揺るガスほどの規模と速度で進行している人口動態の変革を示しています。労働力不足、社会保障制度の危機、地域社会の衰退といった課題は既に顕在化しつつあり、将来これらの問題はより一層深刻化することが科学的データに基づいて予測されています。</p>
-                <p>この現状と将来展望に対する正確な認識は、効果的かつ包括的な国家戦略を策定し、実行していく上での不可欠な前提となります。社会全体の持続的な繁栄と安寧を確保するための不断の努力が求められています。</p>
-                <p class="text-sm text-gray-500 mt-4">出典：本インフォグラフィックのデータは、主に総務省統計局「人口推計」、厚生労働省「人口動態統計」、国立社会保障・人口問題研究所「日本の将来推計人口（令和5年推計）」及び関連資料に基づいています。</p>
-            </div>
-        </section>
-
-    </main>
-
-    <footer class="text-center py-8 bg-[#023047] text-white">
-        <p>&copy; <span id="currentYear"></span> 日本の少子高齢化インフォグラフィック. All rights reserved.</p>
-    </footer>
-
-    <script>
-        document.getElementById('currentYear').textContent = new Date().getFullYear();
-
-        const chartColors = ['#0077B6', '#FB8500', '#83C5BE', '#FFB703', '#023047', '#219EBC', '#FFDDD2', '#006D77'];
-        const borderColor = '#CCCCCC';
-        const gridColor = '#DDDDDD';
-        const fontColor = '#2B2D42';
-        const tooltipBackgroundColor = 'rgba(2, 48, 71, 0.85)'; // #023047 with opacity
-
-        function wrapLabel(label, maxLength = 16) {
-            if (typeof label !== 'string' || label.length <= maxLength) {
-                return label;
-            }
-            const words = label.split(' ');
-            const lines = [];
-            let currentLine = '';
-            for (const word of words) {
-                if ((currentLine + word).length > maxLength && currentLine.length > 0) {
-                    lines.push(currentLine.trim());
-                    currentLine = word + ' ';
-                } else {
-                    currentLine += word + ' ';
-                }
-            }
-            if (currentLine.trim().length > 0) {
-                lines.push(currentLine.trim());
-            }
-            return lines.length > 0 ? lines : [label]; // Ensure it always returns at least the original if split fails
-        }
-
-        const commonChartOptions = (titleText) => ({
-            responsive: true,
-            maintainAspectRatio: false,
-            plugins: {
-                title: {
-                    display: false, // Custom title used above chart
-                    text: titleText,
-                    font: { size: 16, weight: 'bold', family: "'Noto Sans JP', sans-serif" },
-                    color: fontColor
-                },
-                legend: {
-                    labels: {
-                        color: fontColor,
-                        font: { family: "'Noto Sans JP', sans-serif" }
-                    }
-                },
-                tooltip: {
-                    backgroundColor: tooltipBackgroundColor,
-                    titleFont: { family: "'Noto Sans JP', sans-serif", size: 14, weight: 'bold' },
-                    bodyFont: { family: "'Noto Sans JP', sans-serif", size: 12 },
-                    footerFont: { family: "'Noto Sans JP', sans-serif", size: 10 },
-                    callbacks: {
-                        title: function(tooltipItems) {
-                            const item = tooltipItems[0];
-                            let label = item.chart.data.labels[item.dataIndex];
-                            if (Array.isArray(label)) {
-                              return label.join(' ');
-                            }
-                            return label;
-                        }
-                    }
-                }
-            },
-            scales: {
-                x: {
-                    ticks: { 
-                        color: fontColor,
-                        font: { family: "'Noto Sans JP', sans-serif" },
-                        callback: function(value, index, values) {
-                            const label = this.getLabelForValue(value);
-                             return wrapLabel(label, 10); // Shorter wrap for axis labels
-                        }
-                    },
-                    grid: { color: gridColor, display: false },
-                    title: { display: true, text: '', color: fontColor, font: { family: "'Noto Sans JP', sans-serif" }}
-                },
-                y: {
-                    ticks: { color: fontColor, font: { family: "'Noto Sans JP', sans-serif" }},
-                    grid: { color: gridColor },
-                    title: { display: true, text: '', color: fontColor, font: { family: "'Noto Sans JP', sans-serif" }}
-                }
-            }
-        });
-
-        const ageStructureData = {
-            labels: [wrapLabel('15歳未満人口 (11.4%)'), wrapLabel('15～64歳人口 (59.2%)'), wrapLabel('65歳以上人口 (29.3%)')],
-            datasets: [{
-                label: '年齢構成割合',
-                data: [11.4, 59.2, 29.3],
-                backgroundColor: [chartColors[0], chartColors[1], chartColors[2]],
-                borderColor: 'white',
-                borderWidth: 2
-            }]
-        };
-        new Chart(document.getElementById('ageStructureChart'), {
-            type: 'doughnut',
-            data: ageStructureData,
-            options: {
-                ...commonChartOptions('日本の年齢構成（2024年9月推計）'),
-                 scales: { x: { display: false }, y: { display: false } }
-            }
-        });
-
-        const agingRateTrendData = {
-            labels: ['1950年', '1960年', '1970年', '1980年', '1990年', '1994年', '2000年', '2005年', '2010年', '2015年', '2020年', '2023年', '2024年'],
-            datasets: [{
-                label: '高齢化率 (%)',
-                data: [4.9, 5.7, 7.1, 9.1, 12.1, 14.1, 17.4, 20.2, 23.0, 26.6, 28.6, 29.1, 29.3],
-                borderColor: chartColors[0],
-                backgroundColor: 'rgba(0, 119, 182, 0.1)',
-                fill: true,
-                tension: 0.1
-            }]
-        };
-        const agingRateTrendOptions = commonChartOptions('高齢化率の推移（1950年～2024年）');
-        agingRateTrendOptions.scales.y.title.text = '高齢化率 (%)';
-        agingRateTrendOptions.scales.x.title.text = '年';
-        new Chart(document.getElementById('agingRateTrendChart'), {
-            type: 'line',
-            data: agingRateTrendData,
-            options: agingRateTrendOptions
-        });
-        
-        const tfrTrendData = {
-            labels: ['1970年', '1975年', '1980年', '1985年', '1990年', '1995年', '2000年', '2005年', '2008年', '2010年', '2015年', '2020年', '2021年', '2022年', '2023年'],
-            datasets: [{
-                label: '合計特殊出生率',
-                data: [2.13, 1.91, 1.75, 1.76, 1.54, 1.42, 1.36, 1.26, 1.37, 1.39, 1.45, 1.33, 1.30, 1.26, 1.20],
-                borderColor: chartColors[1],
-                backgroundColor: 'rgba(251, 133, 0, 0.1)',
-                fill: true,
-                tension: 0.1
-            }]
-        };
-        const tfrTrendOptions = commonChartOptions('合計特殊出生率の推移（1970年～2023年）');
-        tfrTrendOptions.scales.y.title.text = '合計特殊出生率';
-        tfrTrendOptions.scales.x.title.text = '年';
-        new Chart(document.getElementById('tfrTrendChart'), {
-            type: 'line',
-            data: tfrTrendData,
-            options: tfrTrendOptions
-        });
-
-        const birthsTrendData = {
-            labels: ['1975年', '1980年', '1985年', '1990年', '1995年', '2000年', '2005年', '2010年', '2015年', '2020年', '2023年'],
-            datasets: [{
-                label: '出生数 (万人)',
-                data: [190.1, 157.7, 143.2, 122.2, 118.7, 119.1, 106.3, 107.1, 100.6, 84.1, 72.7],
-                backgroundColor: chartColors[2],
-                borderColor: chartColors[2],
-                borderWidth: 1
-            }]
-        };
-        const birthsTrendOptions = commonChartOptions('出生数の推移（1975年～2023年）');
-        birthsTrendOptions.scales.y.title.text = '出生数 (万人)';
-        birthsTrendOptions.scales.x.title.text = '年';
-        new Chart(document.getElementById('birthsTrendChart'), {
-            type: 'bar',
-            data: birthsTrendData,
-            options: birthsTrendOptions
-        });
-
-        const populationProjectionData = {
-            labels: ['2020年', '2030年', '2040年', '2050年', '2056年', '2060年', '2070年'],
-            datasets: [{
-                label: '総人口 (万人)',
-                data: [12615, 11912, 11092, 10192, 9990, 9515, 8700],
-                borderColor: chartColors[3],
-                backgroundColor: 'rgba(255, 183, 3, 0.1)',
-                fill: true,
-                tension: 0.1
-            }]
-        };
-        const populationProjectionOptions = commonChartOptions('総人口の将来推移（2020年～2070年）');
-        populationProjectionOptions.scales.y.title.text = '総人口 (万人)';
-        populationProjectionOptions.scales.x.title.text = '年';
-        new Chart(document.getElementById('populationProjectionChart'), {
-            type: 'line',
-            data: populationProjectionData,
-            options: populationProjectionOptions
-        });
-
-        const agingRateProjectionData = {
-            labels: ['2020年', '2030年', '2040年', '2045年', '2050年', '2060年', '2070年'],
-            datasets: [{
-                label: '高齢化率 (%)',
-                data: [28.6, 31.2, 34.8, 36.3, 37.7, 38.1, 38.7],
-                borderColor: chartColors[4],
-                backgroundColor: 'rgba(2, 48, 71, 0.1)',
-                fill: true,
-                tension: 0.1
-            }]
-        };
-        const agingRateProjectionOptions = commonChartOptions('高齢化率の将来推移（2020年～2070年）');
-        agingRateProjectionOptions.scales.y.title.text = '高齢化率 (%)';
-        agingRateProjectionOptions.scales.x.title.text = '年';
-        new Chart(document.getElementById('agingRateProjectionChart'), {
-            type: 'line',
-            data: agingRateProjectionData,
-            options: agingRateProjectionOptions
-        });
-
-        const dependencyRatioData = {
-            labels: ['1950年', '2020年', '2023年', '2040年', '2070年'],
-            datasets: [{
-                label: '高齢者扶養比率 (%)',
-                data: [8.3, 48.0, 50.0, 60.0, 74.2], // (65歳以上人口 / 15～64歳人口) * 100
-                borderColor: chartColors[5],
-                backgroundColor: 'rgba(33, 158, 188, 0.1)',
-                fill: true,
-                tension: 0.1
-            }]
-        };
-        const dependencyRatioOptions = commonChartOptions('高齢者扶養比率の推移と将来推計');
-        dependencyRatioOptions.scales.y.title.text = '高齢者扶養比率 (%)';
-        dependencyRatioOptions.scales.x.title.text = '年';
-        new Chart(document.getElementById('dependencyRatioChart'), {
-            type: 'line',
-            data: dependencyRatioData,
-            options: dependencyRatioOptions
-        });
-
-        const pyramidOptions = (title) => ({
-            indexAxis: 'y',
-            responsive: true,
-            maintainAspectRatio: false,
-            scales: {
-                x: {
-                    stacked: true,
-                    ticks: {
-                        callback: function(value) { return Math.abs(value) + '万人'; },
-                        color: fontColor,
-                        font: { family: "'Noto Sans JP', sans-serif" }
-                    },
-                    grid: { color: gridColor },
-                    title: { display: true, text: '人口 (万人)', color: fontColor, font: { family: "'Noto Sans JP', sans-serif" }}
-                },
-                y: {
-                    stacked: true,
-                    ticks: { color: fontColor, font: { family: "'Noto Sans JP', sans-serif" }},
-                    grid: { display: false },
-                    title: { display: true, text: '年齢層', color: fontColor, font: { family: "'Noto Sans JP', sans-serif" }}
-                }
-            },
-            plugins: {
-                title: { display: false, text: title, font: { size: 16 }, color: fontColor },
-                tooltip: {
-                    backgroundColor: tooltipBackgroundColor,
-                    callbacks: {
-                        label: function(context) {
-                            return `${context.dataset.label}: ${Math.abs(context.raw)} 万人`;
-                        }
-                    }
-                },
-                legend: {
-                    labels: { color: fontColor, font: { family: "'Noto Sans JP', sans-serif" } }
-                }
-            }
-        });
-
-        const ageCategories = ['0-14歳', '15-39歳', '40-64歳', '65-74歳', '75歳以上'];
-
-        const pyramid1990Data = {
-            labels: ageCategories,
-            datasets: [
-                { label: '男性', data: [-1000, -1800, -1500, -400, -200].map(x => x*1.2), backgroundColor: chartColors[0], stack: 'Stack 0' },
-                { label: '女性', data: [950, 1750, 1450, 500, 300].map(x => x*1.2), backgroundColor: chartColors[1], stack: 'Stack 0' }
-            ]
-        };
-        new Chart(document.getElementById('populationPyramid1990'), { type: 'bar', data: pyramid1990Data, options: pyramidOptions('1990年 人口ピラミッド') });
-
-        const pyramid2020Data = {
-            labels: ageCategories,
-            datasets: [
-                { label: '男性', data: [-750, -1600, -1800, -800, -700], backgroundColor: chartColors[0], stack: 'Stack 0' },
-                { label: '女性', data: [700, 1550, 1750, -900, -950], backgroundColor: chartColors[1], stack: 'Stack 0' }
-            ]
-        };
-         new Chart(document.getElementById('populationPyramid2020'), { type: 'bar', data: pyramid2020Data, options: pyramidOptions('2020年 人口ピラミッド') });
-
-
-        const pyramid2070Data = {
-            labels: ageCategories,
-            datasets: [
-                { label: '男性', data: [-400, -1000, -1100, -600, -800], backgroundColor: chartColors[0], stack: 'Stack 0' },
-                { label: '女性', data: [380, 950, 1050, 700, 1100], backgroundColor: chartColors[1], stack: 'Stack 0' }
-            ]
-        };
-        new Chart(document.getElementById('populationPyramid2070'), { type: 'bar', data: pyramid2070Data, options: pyramidOptions('2070年 人口ピラミッド (推計)') });
-
-        const tfrProjectionData = {
-            labels: ['2020年', '2030年', '2040年', '2050年', '2060年', '2070年'],
-            datasets: [
-                {
-                    label: '実績値',
-                    data: [1.33, null, null, null, null, null], // 2020年実績
-                    borderColor: chartColors[0],
-                    borderDash: [5, 5],
-                    tension: 0.1,
-                    pointRadius: 5,
-                },
-                {
-                    label: '高位推計',
-                    data: [null, 1.45, 1.55, 1.60, 1.62, 1.64],
-                    borderColor: chartColors[2], // Green
-                    fill: false,
-                    tension: 0.1
-                },
-                {
-                    label: '中位推計',
-                    data: [null, 1.30, 1.33, 1.35, 1.36, 1.36],
-                    borderColor: chartColors[1], // Orange
-                    fill: false,
-                    tension: 0.1
-                },
-                {
-                    label: '低位推計',
-                    data: [null, 1.15, 1.13, 1.13, 1.13, 1.13],
-                    borderColor: chartColors[3], // Yellow/Gold
-                    fill: false,
-                    tension: 0.1
-                }
-            ]
-        };
-        const tfrProjectionOptions = commonChartOptions('将来の合計特殊出生率の仮定');
-        tfrProjectionOptions.scales.y.title.text = '合計特殊出生率';
-        tfrProjectionOptions.scales.x.title.text = '年';
-        tfrProjectionOptions.plugins.tooltip.callbacks.label = function(context) {
-            let label = context.dataset.label || '';
-            if (label) {
-                label += ': ';
-            }
-            if (context.parsed.y !== null) {
-                label += context.parsed.y.toFixed(2);
-            }
-            return label;
-        };
-         new Chart(document.getElementById('tfrProjectionChart'), {
-            type: 'line',
-            data: tfrProjectionData,
-            options: tfrProjectionOptions
-        });
-
-        // Smooth scroll for navbar links
-        document.querySelectorAll('#navbar a').forEach(anchor => {
-            anchor.addEventListener('click', function (e) {
-                e.preventDefault();
-                const targetId = this.getAttribute('href');
-                const targetElement = document.querySelector(targetId);
-                if (targetElement) {
-                    const offsetTop = targetElement.offsetTop - document.getElementById('navbar').offsetHeight; // Adjust for sticky nav height
-                    window.scrollTo({
-                        top: offsetTop,
-                        behavior: 'smooth'
-                    });
-                }
-            });
-        });
-
-    </script>
+    window.onload = generateSkill;
+  </script>
 </body>
 </html>
